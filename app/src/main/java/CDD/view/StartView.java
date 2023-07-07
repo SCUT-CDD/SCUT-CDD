@@ -1,8 +1,6 @@
 package CDD.view;
 
 
-import static androidx.core.app.ActivityCompat.startActivityForResult;
-
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.app.ActivityCompat;
@@ -23,12 +21,9 @@ import android.widget.ImageView;
 import android.widget.Toast;
 import android.widget.VideoView;
 
-import androidx.appcompat.app.AlertDialog;
 import androidx.constraintlayout.widget.ConstraintLayout;
-import androidx.core.app.ActivityCompat;
 
 import com.development.scut_cdd.R;
-import com.development.scut_cdd.gaming;
 
 public class StartView extends ConstraintLayout {
     private Context mContext;

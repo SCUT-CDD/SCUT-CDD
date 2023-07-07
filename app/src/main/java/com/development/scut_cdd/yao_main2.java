@@ -4,25 +4,21 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 import android.view.WindowManager;
-import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.constraintlayout.widget.ConstraintLayout;
 
 import CDD.view.BluetoothView;
-import CDD.view.ChatView;
 import CDD.view.InputIPView;
 import CDD.view.RegisterView;
-import CDD.view.SettlementScoreView;
 import CDD.view.StartView;
 
-public class main extends AppCompatActivity {
+public class yao_main2 extends AppCompatActivity {
 
     protected void onCreate(Bundle savedInstanceState)
     {
         super.onCreate(savedInstanceState);
         getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN, WindowManager.LayoutParams.FLAG_FULLSCREEN);
-        setContentView(R.layout.main);
+        setContentView(R.layout.yao_main2);
 
         StartView.setAppCompatActivity(this);
         InputIPView.setAppCompatActivity(this);

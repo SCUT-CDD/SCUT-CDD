@@ -30,7 +30,7 @@
         android:usesCleartextTraffic="true"
         tools:targetApi="31">
         <activity
-            android:name=".MainActivity"
+            android:name=".yao_main1"
             android:exported="true"
             android:screenOrientation="landscape">
             <intent-filter>
