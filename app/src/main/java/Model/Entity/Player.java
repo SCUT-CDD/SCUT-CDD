@@ -1,7 +1,5 @@
 package Model.Entity;
 
-import android.graphics.Bitmap;
-
 import java.util.Vector;
 
 import Model.ServiceImpl.CardboardServiceImpl;
@@ -13,67 +11,9 @@ public class Player {
     private CardGroup playerCardGroup = new CardGroup();//玩家剩余的手牌
     private SelectedCardGroup selCards = new SelectedCardGroup();//玩家选中即将要出的牌
     private final Vector<Prop> props;
-
-    public int getRank() {
-        return rank;
-    }
-
-    public void setRank(int rank) {
-        this.rank = rank;
-    }
-
-    private int rank=0;
-
-    public Title getTitles() {
-        return titles;
-    }
-
-    private final Title titles =new Title(0,"平平无奇","未获得任何成就");
-
-    public String getTitle() {
-        return title;
-    }
-
-    private String title;
+    private final Vector<Title> titles;
     private final Vector<Player> playmate;
-
-    public int getWinTimes() {
-        return winTimes;
-    }
-
-    public void addWinTimes() {
-        this.winTimes+=1;
-    }
-
-    private int winTimes=0;
-
-    public int getLoseTimes() {
-        return loseTimes;
-    }
-
-    public void addLoseTimes() {
-        this.loseTimes +=1;
-    }
-
-    private int loseTimes=0;
-
-    public Bitmap getHeadBitmap() {
-        return headBitmap;
-    }
-
-    public void setHeadBitmap(Bitmap headBitmap) {
-        this.headBitmap = headBitmap;
-    }
-    Bitmap headBitmap = null;
-
-
-
-    public int winRate(){
-        if(winTimes+loseTimes==0)
-            return  0;
-        else return winTimes/(winTimes+loseTimes);
-    }
-
+    private int winTimes;
 
 
     public Player(int order,String name,int score) {
@@ -86,21 +26,9 @@ public class Player {
         props.add(new Prop(3, "移花接木", 500));
         props.add(new Prop(4, "偷天换日", 600));
         playmate =new Vector<>(3);
-        title=this.titles.Id_Name(winTimes);
+        titles=null;
     }
-//    public Player(int order, String name, int score, int Title) {
-//        this.nickName=name;
-//        this.order=order;
-//        this.score = score;
-//        this.props = new Vector<>(4);
-//        this.titles=new Vector<>(8);
-//        props.add(new Prop(1, "偷龙转凤", 300));
-//        props.add(new Prop(2, "透视眼", 400));
-//        props.add(new Prop(3, "移花接木", 500));
-//        props.add(new Prop(4, "偷天换日", 600));
-//        playmate =new Vector<>(3);
-//        title= this.titles.get(Title).getName(this);
-//    }
+
 
     public void propInitial(CardboardServiceImpl board) {
         for (Prop prop : props) {

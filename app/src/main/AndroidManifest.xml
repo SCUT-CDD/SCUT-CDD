@@ -1,18 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools"
-    tools:ignore="MissingLeanbackLauncher"
-    package="com.development.scut_cdd">
-
-    <!--网络权限-->
-    <uses-permission android:name="android.permission.INTERNET" />
-    <!--相机权限-->
-    <uses-permission android:name="android.permission.CAMERA"
-        tools:ignore="PermissionImpliesUnsupportedChromeOsHardware" />
-    <!-- 读写文件权限 -->
-    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
-    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
-
+    xmlns:tools="http://schemas.android.com/tools">
 
 
     <uses-permission android:name="android.permission.BLUETOOTH_CONNECT" />
@@ -40,10 +28,8 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.SCUTCDD"
         android:usesCleartextTraffic="true"
-        tools:targetApi="31"
-        android:requestLegacyExternalStorage="true">
-
-         <activity
+        tools:targetApi="31">
+        <activity
             android:name=".yao_main1"
             android:exported="true"
             android:screenOrientation="landscape">
@@ -51,43 +37,7 @@
                 <action android:name="android.intent.action.MAIN" />
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
-        
-
-
-        <activity
-            android:name=".f_MainActivity3_setting"
-            android:exported="true"
-            android:screenOrientation="landscape"/>
-        <activity
-            android:name=".f_MainActivity2_basic"
-            android:exported="true"
-            android:screenOrientation="landscape">
-        <intent-filter>
-            <action android:name="android.intent.action.MAIN" />
-
-            <category android:name="android.intent.category.LAUNCHER" />
-        </intent-filter>
         </activity>
-
-        <activity
-            android:name=".f_MainActivity"
-            android:exported="true"
-            android:screenOrientation="landscape">
-
-        </activity>
-        <!-- Android7.0以后读取文件需要配置Provider -->
-        <provider
-            android:name="androidx.core.content.FileProvider"
-            android:authorities="com.development.scut_cdd.cache"
-            android:exported="false"
-            android:grantUriPermissions="true">
-
-            <!-- 元数据 -->
-            <meta-data
-                android:name="android.support.FILE_PROVIDER_PATHS"
-                android:resource="@xml/f_file_paths" />
-        </provider>
-
     </application>
 
 </manifest>
