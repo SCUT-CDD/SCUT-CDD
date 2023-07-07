@@ -1,4 +1,4 @@
-package View.util;
+package GameView.util;
 
 import java.util.Scanner;
 import java.util.Vector;

@@ -35,7 +35,6 @@
         android:orientation="vertical"
         app:layout_constraintGuide_percent="0.2" />
 
-
     <VideoView
         android:id="@+id/video"
         android:layout_width="430dp"
