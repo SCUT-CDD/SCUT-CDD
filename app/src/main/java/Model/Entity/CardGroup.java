@@ -14,11 +14,15 @@ public class CardGroup {
     public String toString(){
         StringBuilder s=new StringBuilder();
         for(int i=0;i<cards.size();i++){
-            s.append(cards.get(i).toString()).append(" ");
+            s.append("(");
+            s.append(cards.get(i).toString());
+            s.append(")").append(" ");
         }
         return s.toString();
     }
-
+    public void addCard(Card c){
+        cards.add(c);
+    }
 
     /**
      * 描述:把cg的Vector<Card> cards

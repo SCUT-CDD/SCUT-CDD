@@ -14,7 +14,6 @@ public class GameBaseOnCMD {
         CardBoardConImpl cbcontroller = new CardBoardConImpl();
         cbcontroller.operationEvent(operation);
 
-
         GameTurnConImpl gameTurnCon= new GameTurnConImpl();
         while(true) {
             cbcontroller.disAllPlayerHandCards();

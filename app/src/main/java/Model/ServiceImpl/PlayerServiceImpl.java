@@ -23,7 +23,7 @@ public class PlayerServiceImpl implements PlayerService {
         player.getSelCards().getCards().clear();
         //先加入selectedCardGroup 如果出牌有效 则在玩家手牌中减去
         for (int i:index) {
-            player.getSelCards().getCards().add(player.getPlayerCardGroup().getCards().elementAt(i-1-location1));
+            player.getSelCards().getCards().add(player.getOwnCardGroup().getCards().elementAt(i-1-location1));
             location1++;
         }
         player.getSelCards().updatePattern();
@@ -37,7 +37,7 @@ public class PlayerServiceImpl implements PlayerService {
         //出牌有效 移出
         int location2=0;
         for (int i:index) {
-            player.getPlayerCardGroup().getCards().remove(i-1-location2);
+            player.getOwnCardGroup().getCards().remove(i-1-location2);
             location2++;
         }
         //更新上家已出手牌
