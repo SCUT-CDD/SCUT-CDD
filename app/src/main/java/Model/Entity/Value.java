@@ -7,9 +7,19 @@ public enum Value {
     Value(int value) {
         this.number = value;
     }
-    public int getValue() {
-        return  number;
+
+    public int getValue(){
+        return number;
     }
 
+    /**
+     * 描述:
+     * @author 叶达杭
+     * @param ordinal 0-ACE 1-TWO .....
+     * @return Model.Entity.Value 添加说明
+    */
+    public static Value fromOrdinal(int ordinal){
+        return Value.values()[ordinal];
+    }
 
 }

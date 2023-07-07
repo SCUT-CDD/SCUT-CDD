@@ -7,6 +7,7 @@ public class Card {
     private Suit suit;
     private Value value;
 
+
     //参数是牌的属性花色Suit,数字Value，对其进行初始化，返回值是初始化之后的牌
     public Card (Suit suit , Value value){
         this.suit=suit;
@@ -125,7 +126,9 @@ public class Card {
         return null;
     }
 
-
+    public boolean isValueEqualTo(Card c){
+        return this.value == c.getValue();
+    }
     /**
      * 描述:比较牌的大小，先比较点数，再比较花色。
      * @author 叶达杭

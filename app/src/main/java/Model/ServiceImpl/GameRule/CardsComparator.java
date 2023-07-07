@@ -67,14 +67,15 @@ public class CardsComparator implements Model.Service.GameRule.CardsComparator {
     private boolean SingleCompare(SelectedCardGroup upperShownCards, SelectedCardGroup bottomShownCards){
         Vector<Card> upperShownCardsV=upperShownCards.getCards();
         Vector<Card> bottomShownCardsV=bottomShownCards.getCards();
-             if(getNumberOfCard(upperShownCardsV.get(0))<getNumberOfCard(bottomShownCardsV.get(0))){
-                 return true;
-             }else if(getNumberOfCard(upperShownCardsV.get(0))==getNumberOfCard(bottomShownCardsV.get(0))){
-                 //点数相同比较花色
-                 return getFaceSuitOfCard(upperShownCardsV.get(0))<getNumberOfCard(bottomShownCardsV.get(0));
-             }else{
-                 return false;
-             }
+        return upperShownCardsV.get(0).compareTo(bottomShownCardsV.get(0))==-1;
+//             if(getNumberOfCard(upperShownCardsV.get(0).compareTo())<getNumberOfCard(bottomShownCardsV.get(0))){
+//                 return true;
+//             }else if(getNumberOfCard(upperShownCardsV.get(0))==getNumberOfCard(bottomShownCardsV.get(0))){
+//                 //点数相同比较花色
+//                 return getFaceSuitOfCard(upperShownCardsV.get(0))>getFaceSuitOfCard(bottomShownCardsV.get(0));
+//             }else{
+//                 return false;
+//             }
     }
 
     /**
@@ -133,21 +134,8 @@ public class CardsComparator implements Model.Service.GameRule.CardsComparator {
     */
     private boolean APairCompare(SelectedCardGroup upperShownCards, SelectedCardGroup bottomShownCards){
 
-        Map<Value,Integer> upperCardsMap = upperShownCards.getCountMap();
-        Map<Value,Integer> bottomCardsMap = bottomShownCards.getCountMap();
-        int upperCardsNumberOfThree = -1;
-        for(Map.Entry<Value,Integer> entry:upperCardsMap.entrySet()){
-            if(entry.getValue()==2) {
-                upperCardsNumberOfThree = entry.getKey().getValue();break;
-            }
-        }
-        int bottomCardsNumberOfThree = -1;
-        for(Map.Entry<Value,Integer> entry:bottomCardsMap.entrySet()){
-            if(entry.getValue()==2) {
-                bottomCardsNumberOfThree = entry.getKey().getValue();break;
-            }
-        }
-        return bottomCardsNumberOfThree > upperCardsNumberOfThree;
+
+        return upperShownCards.getCards().get(0).compareTo(bottomShownCards.getCards().get(0))==-1;
     }
 
     /**

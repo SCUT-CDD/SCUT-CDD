@@ -1,5 +1,7 @@
 package Model.ServiceImpl.GameRule;
 
+import com.development.scut_cdd.ServerLayer.GameRoomData;
+
 import Model.Dao.GameRuleDao;
 import Model.Dao.GameTurnDao;
 import Model.DaoImpl.GameRuleDaoImpl;
@@ -15,6 +17,8 @@ import Model.Service.GameRule.GameRule;
 public class GameRuleImpl implements GameRule {
     GameRuleDao gameRuleDao =new GameRuleDaoImpl();
     GameTurnDao gameTurnDao = new GameTurnDaoImpl();
+
+
     public boolean validate(SelectedCardGroup scg){
          if(gameRuleDao.getFirstRoundFlag()){
              return beginValidate(scg);
@@ -22,6 +26,40 @@ public class GameRuleImpl implements GameRule {
              //中间对局
              return middleValidate(scg);
          }
+    }
+    public boolean validate(GameRoomData gameRoomData,SelectedCardGroup scg){
+        if(gameRoomData.getRoundCount()==0){
+            return beginValidate(gameRoomData,scg);
+        }else{
+            //中间对局
+            return middleValidate(gameRoomData,scg);
+        }
+    }
+
+    private boolean beginValidate(GameRoomData gameRoomData,SelectedCardGroup scg){
+            //是第一回合
+            //是房间内的第一次对局 由拿方块3的一方首先出牌，而且第一轮出牌中必须包含方块3
+            if(scg.isContain(Value.THREE, Suit.DIAMONDS)){
+                //含有方块3 判断是否为合法牌型
+                CardsPatternRecognizer cardsPatternRecognizer =new CardsPatternRecognizerImpl();
+                if(cardsPatternRecognizer.recognizePattern(scg)!= CardGroupPattern.Undetermined){
+                    return true;
+                }
+            }
+
+        return false;
+    }
+    private boolean middleValidate(GameRoomData gameRoomData,SelectedCardGroup scg) {
+        CardsComparator comparator = new Model.ServiceImpl.GameRule.CardsComparator();
+        if (gameRoomData.getPassCount()==3) {
+            if (scg.getCardGroupPattern().getPattern() != CardGroupPattern.Undetermined) {
+                return true;
+            } else {
+                return false;
+            }
+        } else {
+            return comparator.SelectedCardGroupCompare(gameRoomData.getPreviousShownCards(), scg);
+        }
     }
 
     private boolean beginValidate(SelectedCardGroup scg){

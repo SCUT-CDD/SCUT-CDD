@@ -45,6 +45,7 @@ public class CardsPatternRecognizerImpl implements CardsPatternRecognizer {
                 //在类型值中 int数值大小暗含了类型大小
                 Vector <Integer> patterns =new Vector<>();
                 patterns.add(distinguishStraight(scg));
+                patterns.add(isSameFaceSuitFive(scg));
                 patterns.add(isFourWithSingle(scg));
                 patterns.add(isThreeWithOnePair(scg));
                 //现在默认识别为类型最大的牌型
