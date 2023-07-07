@@ -9,7 +9,7 @@ import android.widget.ImageButton;
 
 import F_class.f_SettingView;
 
-public class MainActivity3_setting extends AppCompatActivity {
+public class f_MainActivity3_setting extends AppCompatActivity {
 
 
     private ImageButton imageButton_info;
@@ -19,7 +19,7 @@ public class MainActivity3_setting extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         f_SettingView.setAppCompatActivity(this);
-        setContentView(R.layout.activity_main_activity3_setting);
+        setContentView(R.layout.f_activity_main_activity3_setting);
         f_SettingView settingView=findViewById(R.id.settingView);
         imageButton_info=findViewById(R.id.btn_setting);
         imageButton_info.setOnClickListener(new View.OnClickListener() {

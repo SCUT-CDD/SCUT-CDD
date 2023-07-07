@@ -29,11 +29,11 @@
 
 
         <activity
-            android:name=".MainActivity3_setting"
+            android:name=".f_MainActivity3_setting"
             android:exported="true"
             android:screenOrientation="landscape"/>
         <activity
-            android:name=".MainActivity2_basic"
+            android:name=".f_MainActivity2_basic"
             android:exported="true"
             android:screenOrientation="landscape">
         <intent-filter>
@@ -44,7 +44,7 @@
         </activity>
 
         <activity
-            android:name=".MainActivity"
+            android:name=".f_MainActivity"
             android:exported="true"
             android:screenOrientation="landscape">
 

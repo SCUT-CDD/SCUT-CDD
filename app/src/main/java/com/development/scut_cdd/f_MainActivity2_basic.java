@@ -2,26 +2,23 @@ package com.development.scut_cdd;
 
 import androidx.appcompat.app.AppCompatActivity;
 
-
 import android.Manifest;
-import android.annotation.SuppressLint;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.os.Build;
 import android.os.Bundle;
 import android.text.TextUtils;
-import android.view.LayoutInflater;
 import android.view.View;
-
-import android.widget.FrameLayout;
 import android.widget.ImageButton;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.bumptech.glide.request.RequestOptions;
+import F_class.f_HeadView;
 import com.google.android.material.bottomsheet.BottomSheetDialog;
 import com.google.android.material.imageview.ShapeableImageView;
 import com.tbruyelle.rxpermissions3.RxPermissions;
@@ -31,64 +28,47 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 
 import F_class.f_CameraUtils;
+import F_class.f_SPUtils;
+import Model.Entity.Player;
 
-public class MainActivity extends AppCompatActivity {
-    private FrameLayout container;
-    private ImageButton imageButtonExit;
-    private FrameLayout container_button;
+public class f_MainActivity2_basic extends AppCompatActivity {
+
+    private RelativeLayout container;
     private ImageButton imageButton_info;
-    private View inflatedView;
+    private ImageButton imageButtonExit;
+
+    //图片控件
+    public  ShapeableImageView ivHead;
+    //拍照和相册获取图片的Bitmap
+    private Bitmap orc_bitmap;
+    //Base64
+    private String base64Pic;
+    //Glide请求图片选项配置
 
 
-    @SuppressLint("MissingInflatedId")
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_main);
-
-
-        ivHead=findViewById(R.id.iv_head);
-
-        container = findViewById(R.id.container);
-        container_button = findViewById(R.id.container_button);
-        imageButton_info = findViewById(R.id.mbtn_info_1);
-        imageButtonExit = findViewById(R.id.mbtn_exit_1);
-
-
-        imageButton_info.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                inflateMainActivityLayout();
-            }
-        });
-
+        Player player=new Player(0,"Jack",2000);
 
         //检查版本
         checkVersion();
-//        imageButtonExit.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View v) {
-//                hideContainerView();
-//            }
-//        });
-    }
-    @SuppressLint("ResourceType")
-    private void inflateMainActivityLayout() {
-        if (inflatedView == null) {
-            LayoutInflater inflater = LayoutInflater.from(this);
-            inflatedView = inflater.inflate(R.layout.activity_main, container_button, true);
-        } else {
-            container_button.removeAllViews();
-            container_button.addView(inflatedView);
-        }
+        f_HeadView.setAppCompatActivity(this);
+        setContentView(R.layout.f_activity_main_activity2_basic);
+        f_HeadView headView = findViewById(R.id.view_head);
+        headView.getInformationView().setPlayer(player);
+        headView.setPlayer(headView.getInformationView());
+         ivHead=headView.getInformationView().getIvHead();
 
-    }
-    private void hideContainerView() {
-        if (container != null) {
-            container.setVisibility(View.GONE);
+        //取出缓存
+        String imageUrl = f_SPUtils.getString("imageUrl",null,this);
+        if(imageUrl != null){
+            Glide.with(this).load(imageUrl).apply(requestOptions).into(headView.getInformationView().ivHead);
+            ImageButton imageButton = headView.getInformation_Button();
+            Glide.with(this).load(imageUrl).error(R.drawable.f_beach_background).into(imageButton);
         }
     }
-    //权限请求
+
     private RxPermissions rxPermissions;
     /**
      * Toast提示
@@ -110,7 +90,7 @@ public class MainActivity extends AppCompatActivity {
 
             rxPermissions = new RxPermissions(this);
             //权限请求
-            rxPermissions.request(Manifest.permission.CAMERA, Manifest.permission.WRITE_EXTERNAL_STORAGE)
+            rxPermissions.request(Manifest.permission.CAMERA, Manifest.permission.WRITE_EXTERNAL_STORAGE,Manifest.permission.READ_EXTERNAL_STORAGE)
                     .subscribe(granted -> {
                         if (granted) {//申请成功
                             showMsg("已获取权限");
@@ -139,8 +119,8 @@ public class MainActivity extends AppCompatActivity {
         bottomSheetDialog = new BottomSheetDialog(this);
         bottomView = getLayoutInflater().inflate(R.layout.f_dialog_bottom, null);
         bottomSheetDialog.setContentView(bottomView);
-       // bottomSheetDialog.getWindow().findViewById(R.id.design_bottom_sheet).setBackgroundColor(Color.TRANSPARENT);
-//        TextView tvTakePictures = bottomView.findViewById(R.id.tv_take_pictures);
+        // bottomSheetDialog.getWindow().findViewById(R.id.design_bottom_sheet).setBackgroundColor(Color.TRANSPARENT);
+        //TextView tvTakePictures = bottomView.findViewById(R.id.tv_take_pictures);
         TextView tvOpenAlbum = bottomView.findViewById(R.id.tv_open_album);
         TextView tvCancel = bottomView.findViewById(R.id.tv_cancel);
 
@@ -200,16 +180,9 @@ public class MainActivity extends AppCompatActivity {
         startActivityForResult(f_CameraUtils.getSelectPhotoIntent(), SELECT_PHOTO);
     }
 
-    //图片控件
-    private ShapeableImageView ivHead;
-    //拍照和相册获取图片的Bitmap
-    private Bitmap orc_bitmap;
-
-    //Glide请求图片选项配置
     private RequestOptions requestOptions = RequestOptions.circleCropTransform()
             .diskCacheStrategy(DiskCacheStrategy.NONE)//不做磁盘缓存
             .skipMemoryCache(true);//不做内存缓存
-
 
     /**
      * 返回到Activity
@@ -256,17 +229,24 @@ public class MainActivity extends AppCompatActivity {
      */
     private void displayImage(String imagePath) {
         if (!TextUtils.isEmpty(imagePath)) {
+
+            //放入缓存
+            f_SPUtils.putString("imageUrl",imagePath,this);
+
             //显示图片
-            Glide.with(this).load(imagePath).apply(requestOptions).into(ivHead);
-
-            //压缩图片
-            orc_bitmap = f_CameraUtils.compression(BitmapFactory.decodeFile(imagePath));
-
+            Glide.with(this).load(imagePath).apply(requestOptions).error(R.drawable.f_beach_background) .into(ivHead);
+            f_HeadView headView = findViewById(R.id.view_head);
+            ImageButton imageButton = headView.getInformation_Button();
+            Glide.with(this).load(imagePath).error(R.drawable.f_beach_background).into(imageButton);
+            //  压缩图片
+               orc_bitmap = f_CameraUtils.compression(BitmapFactory.decodeFile(imagePath));
+               headView.getInformationView().player.setHeadBitmap(orc_bitmap);
+            //转Base64
+            // base64Pic = BitmapUtils.bitmapToBase64(orc_bitmap);
 
         } else {
             showMsg("图片获取失败");
         }
     }
-
 
 }
