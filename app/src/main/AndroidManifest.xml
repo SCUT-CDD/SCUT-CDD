@@ -43,12 +43,6 @@
         </intent-filter>
         </activity>
 
-        <activity
-            android:name=".f_MainActivity"
-            android:exported="true"
-            android:screenOrientation="landscape">
-
-        </activity>
         <!-- Android7.0以后读取文件需要配置Provider -->
         <provider
             android:name="androidx.core.content.FileProvider"
