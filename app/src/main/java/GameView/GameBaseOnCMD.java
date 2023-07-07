@@ -1,9 +1,8 @@
-package View;
+package GameView;
 
 import ControllerImpl.CardBoardConImpl;
 import ControllerImpl.GameTurnConImpl;
-import ControllerImpl.GameTurnConImpl;
-import View.util.ConsoleInput;
+import GameView.util.ConsoleInput;
 
 public class GameBaseOnCMD {
 

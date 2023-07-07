@@ -1,13 +1,13 @@
-package View;
+package GameView;
 
-import static View.util.ConsoleInput.getSelectedCardIndexInput;
+import static GameView.util.ConsoleInput.getSelectedCardIndexInput;
 
 import java.util.Scanner;
 import java.util.Vector;
 
 import Controller.ControllerImpl.CardBoardConImpl;
 import Controller.ControllerImpl.GameTurnConImpl;
-import View.util.ConsoleInput;
+import GameView.util.ConsoleInput;
 
 public class GameBaseOnCMD {
 
