@@ -23,4 +23,6 @@ public interface GameTurnDao {
 
     void setPassCount(int i);
 
+
+
 }

@@ -2,6 +2,7 @@ package Model.Entity;
 
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Vector;
 
 /**
 * <p>玩家在出牌阶段选择的牌组
@@ -18,6 +19,14 @@ public class SelectedCardGroup extends CardGroup {
         generateCardGroupHashMap();
         cardGroupPattern.setPattern(this);
     }
+    public void setSelectedCardGroup(Vector <Card> cards){
+        CardGroup cg = new CardGroup();
+        cg.setCardGroup(cards);
+        super.setCardGroup(cg.getCards());
+        generateCardGroupHashMap();
+        cardGroupPattern.setPattern(this);
+    }
+
     public void updatePattern(){
      cardGroupPattern.setPattern(this);
     }

@@ -7,8 +7,12 @@ import Model.Entity.SelectedCardGroup;
 
 public class LocalDB {
 
+//    public static final String user_id = "112233";
+
     /** <p>对局中的四个payer</p>*/
     private static Vector<Player> playerVector= new Vector<>();
+
+    private static String myNickName = "Admin";
     private static int currentPlayer =-1;
     private static boolean firstRoundFlag =false;
 

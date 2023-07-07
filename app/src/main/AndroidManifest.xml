@@ -2,6 +2,7 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools">
 
+<<<<<<< HEAD
 
     <uses-permission android:name="android.permission.BLUETOOTH_CONNECT" />
     <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
@@ -17,6 +18,15 @@
 
     <!--要求设备硬件必须支持蓝牙-->
     <uses-feature android:name="android.hardware.bluetooth" android:required="true"/>
+=======
+    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
+    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
+    <uses-permission android:name="android.permission.INTERNET" />
+    <uses-permission android:name="android.permission.ACCESS_WIFI_STATE" />
+    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
+
+
+>>>>>>> Ye_main_1
 
     <application
         android:allowBackup="true"
@@ -29,12 +39,44 @@
         android:theme="@style/Theme.SCUTCDD"
         android:usesCleartextTraffic="true"
         tools:targetApi="31">
+        <service android:name=".ServerLayer.ServerService"
+            android:label="@string/app_name"
+            android:process=":MyServer"/>
+
         <activity
+<<<<<<< HEAD
             android:name=".yao_main1"
             android:exported="true"
             android:screenOrientation="landscape">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
+=======
+            android:name=".CDD_game_Activity"
+            android:exported="true"
+            android:process=":mainProcess">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+
+                <category android:name="android.intent.category.DEFAULT" />
+            </intent-filter>
+        </activity>
+        <activity
+            android:name=".MyActivity"
+            android:exported="true">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+
+                <category android:name="android.intent.category.DEFAULT" />
+            </intent-filter>
+        </activity>
+        <activity
+            android:name=".CardBoardActivity"
+            android:exported="true"
+            android:screenOrientation="landscape">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+
+>>>>>>> Ye_main_1
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>

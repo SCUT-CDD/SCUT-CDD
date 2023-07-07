@@ -3,18 +3,29 @@ package Model.ServiceImpl;
 import static Model.Entity.Suit.DIAMONDS;
 import static Model.Entity.Value.THREE;
 
+import android.content.Context;
+
+import com.development.scut_cdd.View.MyShowingCard;
+
 import java.security.SecureRandom;
+import java.util.List;
 import java.util.Vector;
 
+import Model.Dao.GameRoomDao;
 import Model.Dao.GameTurnDao;
+import Model.Dao.PlayerEntryDao;
 import Model.DaoImpl.GameTurnDaoImpl;
 import Model.Entity.Card;
 import Model.Entity.CardGroup;
 import Model.Entity.DeckOfCards;
 import Model.Entity.Player;
+import Model.Entity.PlayerModel;
+import Model.Entity.RoomModel;
 import Model.Entity.SelectedCardGroup;
+import com.development.scut_cdd.ServerLayer.GameRoomData;
 import Model.Service.GameTurnService;
 import Model.Service.PlayerService;
+import Model.util.Converter;
 
 /*
 GameTurn类
@@ -23,6 +34,14 @@ GameTurn类
 public class GameTurnServiceImpl implements GameTurnService
 {
     GameTurnDao gameTurnDao = new GameTurnDaoImpl();
+
+    GameRoomDao gameRoomDao ;
+    PlayerEntryDao playerEntryDao;
+
+    public GameTurnServiceImpl(Context context){
+//        gameRoomDao = new GameRoomDaoImpl(context);
+//        playerEntryDao= new PlayerEntryDaoImpl(context);
+    }
     private Vector<Card> player1_handCards = new Vector<>(13);
     private Vector<Card> player2_handCards = new Vector<>(13);
     private Vector<Card> player3_handCards = new Vector<>(13);
@@ -137,44 +156,54 @@ public class GameTurnServiceImpl implements GameTurnService
         SecureRandom random = new SecureRandom();
 
         // Distribute 13 cards to every player
-        while(player1.getPlayerCardGroup().getCards().size() < 13)
+        while(player1.getOwnCardGroup().getCards().size() < 13)
         {
             int i = random.nextInt(deck.poke.size());
-            player1.getPlayerCardGroup().getCards().add(deck.poke.elementAt(i));
+            player1.getOwnCardGroup().getCards().add(deck.poke.elementAt(i));
             deck.poke.remove(i);
         }
-        player1.getPlayerCardGroup().cardGroupSortAsRule(1);
-        setPlayer1_handCards(player1.getPlayerCardGroup());
+        player1.getOwnCardGroup().cardGroupSortAsRule(1);
+        setPlayer1_handCards(player1.getOwnCardGroup());
 
-        while(player2.getPlayerCardGroup().getCards().size() < 13)
+        while(player2.getOwnCardGroup().getCards().size() < 13)
         {
             int i = random.nextInt(deck.poke.size());
-            player2.getPlayerCardGroup().getCards().add(deck.poke.elementAt(i));
+            player2.getOwnCardGroup().getCards().add(deck.poke.elementAt(i));
             deck.poke.remove(i);
         }
-        player2.getPlayerCardGroup().cardGroupSortAsRule(1);
-        setPlayer2_handCards(player2.getPlayerCardGroup());
+        player2.getOwnCardGroup().cardGroupSortAsRule(1);
+        setPlayer2_handCards(player2.getOwnCardGroup());
 
-        while(player3.getPlayerCardGroup().getCards().size() < 13)
+        while(player3.getOwnCardGroup().getCards().size() < 13)
         {
             int i = random.nextInt(deck.poke.size());
-            player3.getPlayerCardGroup().getCards().add(deck.poke.elementAt(i));
+            player3.getOwnCardGroup().getCards().add(deck.poke.elementAt(i));
             deck.poke.remove(i);
         }
-        player3.getPlayerCardGroup().cardGroupSortAsRule(1);
-        setPlayer3_handCards(player3.getPlayerCardGroup());
+        player3.getOwnCardGroup().cardGroupSortAsRule(1);
+        setPlayer3_handCards(player3.getOwnCardGroup());
 
-        while(player4.getPlayerCardGroup().getCards().size() < 13)
+        while(player4.getOwnCardGroup().getCards().size() < 13)
         {
             int i = 0;
-            player4.getPlayerCardGroup().getCards().add(deck.poke.elementAt(i));
+            player4.getOwnCardGroup().getCards().add(deck.poke.elementAt(i));
             deck.poke.remove(i);
         }
-        player4.getPlayerCardGroup().cardGroupSortAsRule(1);
-        setPlayer4_handCards(player4.getPlayerCardGroup());
+        player4.getOwnCardGroup().cardGroupSortAsRule(1);
+        setPlayer4_handCards(player4.getOwnCardGroup());
     }
 
-
+    public void distributeCard(Vector<Player> players){
+        distributeCard(players.get(0),
+                players.get(1),
+                players.get(2),
+                players.get(3));
+    }
+    public Vector<Player> distributeCard(int room_id){
+        Vector<Player> players=gameRoomDao.getAllPlayerInRoom(room_id);
+        distributeCard(players.get(0),players.get(1),players.get(2),players.get(3));
+        return players;
+    }
     public void printCardPointAndScore()
     {
         System.out.println("Card point:");
@@ -188,8 +217,8 @@ public class GameTurnServiceImpl implements GameTurnService
 
     public boolean if_Have_Diamonds_three(Player player){
         for (int i = 0; i < 13; i++) {
-            if (player.getPlayerCardGroup().getCards().elementAt(i).getValue() == THREE
-                    && player.getPlayerCardGroup().getCards().elementAt(i).getSuit() == DIAMONDS)
+            if (player.getOwnCardGroup().getCards().elementAt(i).getValue() == THREE
+                    && player.getOwnCardGroup().getCards().elementAt(i).getSuit() == DIAMONDS)
                 return true;
         }
         return false;
@@ -208,6 +237,29 @@ public class GameTurnServiceImpl implements GameTurnService
        else if (if_Have_Diamonds_three(gameTurnDao.getPlayerVec().get(1))){gameTurnDao.setCurrentPlayer(1);}
        else if (if_Have_Diamonds_three(gameTurnDao.getPlayerVec().get(2))){gameTurnDao.setCurrentPlayer(2);}
        else if (if_Have_Diamonds_three(gameTurnDao.getPlayerVec().get(3))){gameTurnDao.setCurrentPlayer(3);}
+    }
+    public void decideShowingOrder(GameRoomData gameRoomData) {
+        Vector<Player> temp= gameRoomData.getPlayers();
+        // Judge who has DIAMONDS_THREE
+        if (if_Have_Diamonds_three(temp.get(0))){
+            gameRoomData.setCurrentPlayerIndex(0);}
+        else if (if_Have_Diamonds_three(temp.get(1))){
+            gameRoomData.setCurrentPlayerIndex(1);}
+        else if (if_Have_Diamonds_three(temp.get(2))){
+            gameRoomData.setCurrentPlayerIndex(2);}
+        else if (if_Have_Diamonds_three(temp.get(3))){
+            gameRoomData.setCurrentPlayerIndex(3);}
+    }
+    public void decideShowingOrder(int room_id,Vector<Player> temp) {
+        int first;
+        // Judge who has DIAMONDS_THREE
+        if (if_Have_Diamonds_three(temp.get(0))){
+            first=0;}
+        else if (if_Have_Diamonds_three(temp.get(1))){first=1;}
+        else if (if_Have_Diamonds_three(temp.get(2))){first=2;}
+        else {first=3;}
+
+        gameRoomDao.updateCurrentPlayer(room_id,0);//TODO:先默认自己先手
     }
 
     /* Function: Judge the showing CardGroup is valid or not
@@ -232,6 +284,9 @@ public class GameTurnServiceImpl implements GameTurnService
         Player player4 =gameTurnDao.getPlayerVec().get(3);
         distributeCard(player1,player2,player3,player4);
     }
+
+
+
 
     @Override
     public boolean playerShowCards(Vector<Integer> index){
@@ -261,5 +316,101 @@ public class GameTurnServiceImpl implements GameTurnService
     @Override
     public void clearPassCount(){
         gameTurnDao.setPassCount(0);
+    }
+
+
+    public void startTurn(int room_id){
+        //发牌
+        Vector <Player>players=distributeCard(room_id);
+        decideShowingOrder(room_id,players);
+        long temp;
+        for(Player player:players){
+             temp=playerEntryDao.update(new PlayerModel(player));
+        }
+        gameRoomDao.updateIsFirstRound(room_id,true);
+    }
+
+    public Player getPlayer(String user_id){
+        PlayerModel playerModel=playerEntryDao.query(user_id);
+        Player player =playerModel.toPlayer();
+        return player;
+    }
+
+    /**
+     * 描述:玩家出牌
+     * @author 叶达杭
+     * @param list 添加说明
+     * @return void 添加说明
+     */
+    public void playerShowingCards(List<MyShowingCard> list, String user_id){
+        Player player =getPlayer(user_id);
+        Vector<Card> cards= new Vector<>();
+        for(MyShowingCard c:list){
+            for(Card card :player.getOwnCardGroup().getCards()){
+                if(card.compareTo(c.getCard())==0){
+                    cards.add(card);
+                }
+            }
+        }
+        player.getSelCards().setSelectedCardGroup(cards);
+        minusCards(player);//减去已出的牌
+        player.setShownCards(player.getSelCards());
+        RoomModel roomModel=gameRoomDao.getRoom(player.getROOM_ID());
+
+        roomModel.setPREVIOUS_PLAYER(user_id);
+        roomModel.setPREVIOUS_SHOWN_CARD(Converter.cardGroupToString(player.getShownCards()));
+        roomModel.setPREVIOUS_PLAYER_OPERATION(RoomModel.OPERATION_SHOW);
+
+        roomModel.updateTheTurnToNextPlayer();//切换到下一个出牌者
+
+        //更新数据库
+        gameRoomDao.update(roomModel);
+        RoomModel temp=gameRoomDao.getRoom(player.getROOM_ID());
+        playerEntryDao.update(new PlayerModel(player));
+    }
+
+    /**
+     * 描述:从手牌减去已选择的牌
+     * @author 叶达杭
+     * @param player 添加说明
+     * @return void 添加说明
+    */
+    public void minusCards(Player player){
+        Vector<Card> selected =player.getShownCards().getCards();
+        Vector<Card> current = player.getOwnCardGroup().getCards();
+        for(Card c:selected){
+            current.remove(c);
+        }
+    }
+
+    public String getCurrentPlayer(int room_id){
+       return gameRoomDao.getCurrentPlayer(room_id);
+    }
+
+    /**
+     * 描述:机器人回合 机器人可以选择出牌或不出
+     * @author 叶达杭
+     * @param Robot_id 添加说明
+     * @param room_id 添加说明
+     * @return java.lang.String 添加说明
+    */
+    public void robotTurn(String Robot_id,int room_id){
+
+        //默认先pass
+        RoomModel roomModel = gameRoomDao.getRoom(room_id);
+        roomModel.updateTheTurnToNextPlayer();
+        roomModel.setPREVIOUS_PLAYER_OPERATION(RoomModel.OPERATION_PASS);
+        gameRoomDao.update(roomModel);
+    }
+
+    /**
+     * 描述:获得各个玩家在特定玩家屏幕上显示的位置 从自己开始逆时针方向
+     * @author 叶达杭
+     * @param player_id 添加说明
+     * @return void 添加说明
+    */
+    public Vector<String> getPlayerPosition(String player_id){
+        PlayerModel playerModel=playerEntryDao.query(player_id);
+        return playerModel.getItsOrderStrings();
     }
 }
